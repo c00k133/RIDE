@@ -49,7 +49,6 @@ Attempt Login
 
 Verify Failed Login
     Sleep    3
-    Element Text Should Be    tag=error    ${LOG IN FAIL}
 
 Wrap Up
     Sleep    5
