@@ -1,0 +1,56 @@
+*** Settings ***
+Library           Selenium2Library
+
+*** Variables ***
+${URL}            https://www.wikipedia.org/
+${BROWSER}        googlechrome
+${SEARCH WORD}    Robot Framework
+${SEARCH LOCATOR}    id=searchInput
+${TITLE}          Wikipedia
+${WTITLE}         Robot Framework - Wikipedia
+${LOG IN LOCATOR}    id=pt-login
+${USR NAME}       robot-test
+${USR NAME LOCATOR}    id=wpName1
+${PSSWD}          qwerty
+${PSSWD LOCATOR}    id=wpPassword1
+${LOG IN BUTTON}    id=wpLoginAttempt
+${LOG IN FAIL}    Incorrect password entered. Please try again.
+
+*** Keywords ***
+Open Wikipedia
+    Open Browser    ${URL}    ${BROWSER}
+    Maximize Browser Window
+    Verify Wikipedia page opened
+    Sleep    1
+
+Verify Wikipedia page opened
+    Title Should Be    ${TITLE}
+
+Enter Search Word
+    [Arguments]    ${SEARCH WORD}
+    Input Text    ${SEARCH LOCATOR}    ${SEARCH WORD}
+
+Search With Enter
+    Press Key    ${SEARCH LOCATOR}    \\13
+
+Verify Wikipedia RF Opened
+    Title Should Be    ${WTITLE}
+    Sleep    2
+
+Press Log In
+    Click Element    ${LOG IN LOCATOR}
+
+Enter Credentials
+    Input Text    ${USR NAME LOCATOR}    ${USR NAME}
+    Input Text    ${PSSWD LOCATOR}    ${PSSWD}
+
+Attempt Login
+    Click Element    ${LOG IN BUTTON}
+
+Verify Failed Login
+    Sleep    3
+    Element Text Should Be    tag=error    ${LOG IN FAIL}
+
+Wrap Up
+    Sleep    5
+    #Close Browser
