@@ -1,19 +1,21 @@
 *** Settings ***
+Documentation     This text file includes the structure and variables used for the test case 'Wikipedia search'.
 Library           Selenium2Library
 
 *** Variables ***
 ${URL}            https://www.wikipedia.org/
 ${BROWSER}        googlechrome
-${SEARCH WORD}    Robot Framework
 ${SEARCH LOCATOR}    id=searchInput
 ${TITLE}          Wikipedia
 ${WTITLE}         Robot Framework - Wikipedia
+${TABLE LOCATOR}    css=table.infobox.vevent
 ${LOG IN LOCATOR}    id=pt-login
 ${USR NAME}       robot-test
 ${USR NAME LOCATOR}    id=wpName1
 ${PSSWD}          qwerty
 ${PSSWD LOCATOR}    id=wpPassword1
 ${LOG IN BUTTON}    id=wpLoginAttempt
+${ERROR LOCATOR}    css=div.error
 ${LOG IN FAIL}    Incorrect password entered. Please try again.
 
 *** Keywords ***
@@ -37,6 +39,10 @@ Verify Wikipedia RF Opened
     Title Should Be    ${WTITLE}
     Sleep    2
 
+Check Table Info
+    [Arguments]    ${SEARCH WORD}
+    Table Should Contain    ${TABLE LOCATOR}    ${SEARCH WORD}
+
 Press Log In
     Click Element    ${LOG IN LOCATOR}
 
@@ -49,7 +55,8 @@ Attempt Login
 
 Verify Failed Login
     Sleep    3
+    Element Should Contain    ${ERROR LOCATOR}    ${LOG IN FAIL}
 
 Wrap Up
-    Sleep    5
-    #Close Browser
+    Sleep    3
+    Close Browser
